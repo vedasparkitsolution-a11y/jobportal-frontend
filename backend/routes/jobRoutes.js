@@ -360,7 +360,7 @@ router.put('/:id', verifyToken, (req, res) => {
             benefits = ?, notice_period = ?, joining_date = ?, application_method = ?, application_url = ?,
             application_email = ?, application_deadline = ?, job_type = ?, jobType = ?, application_questions = ?,
             latitude = ?, longitude = ?, geo_address = ?, geo_radius = ?, status = ?, updated_at = CURRENT_TIMESTAMP
-        WHERE (id = ? OR job_id = ?) AND (
+        WHERE (job_id = ? OR CAST(id AS TEXT) = ?) AND (
             companyId = ? 
             OR employer_id = ? 
             OR company_id = ? 
@@ -404,7 +404,7 @@ router.put('/:id/status', verifyToken, (req, res) => {
     const { status } = req.body;
     db.run(
         `UPDATE jobs SET status = ?, updated_at = CURRENT_TIMESTAMP 
-         WHERE (id = ? OR job_id = ?) AND (
+         WHERE (job_id = ? OR CAST(id AS TEXT) = ?) AND (
              companyId = ? 
              OR employer_id = ? 
              OR company_id = ? 
@@ -640,9 +640,26 @@ router.get('/company', verifyToken, (req, res) => {
 
 // Get Single Job by ID (candidate view)
 router.get('/:id', (req, res) => {
-    const jobId = req.params.id;
-    db.get('SELECT * FROM jobs WHERE id = ? OR job_id = ? OR CAST(id AS CHAR) = ?', [jobId, jobId, String(jobId)], (err, row) => {
-        if (err || !row) return res.status(404).json({ message: 'Job not found' });
+    const rawJobId = String(req.params.id || '').trim();
+    if (!rawJobId) return res.status(404).json({ message: 'Job not found' });
+
+    const isNumeric = /^\d+$/.test(rawJobId);
+    let query = '';
+    let params = [];
+
+    if (isNumeric) {
+        query = 'SELECT * FROM jobs WHERE id = ? OR job_id = ? OR CAST(id AS TEXT) = ? LIMIT 1';
+        params = [parseInt(rawJobId, 10), rawJobId, rawJobId];
+    } else {
+        query = 'SELECT * FROM jobs WHERE job_id = ? OR CAST(id AS TEXT) = ? LIMIT 1';
+        params = [rawJobId, rawJobId];
+    }
+
+    db.get(query, params, (err, row) => {
+        if (err || !row) {
+            if (err) console.error('Error fetching job by ID:', err.message);
+            return res.status(404).json({ message: 'Job not found' });
+        }
         res.json(row);
     });
 });

@@ -93,6 +93,7 @@ function translateSql(sql, engine) {
             .replace(/INSERT\s+OR\s+IGNORE\s+INTO/gi, 'INSERT INTO')
             .replace(/INSERT\s+OR\s+REPLACE\s+INTO/gi, 'INSERT INTO')
             .replace(/datetime\('now'\)/gi, 'CURRENT_TIMESTAMP')
+            .replace(/AS CHAR\b/gi, 'AS TEXT')
             .replace(/\bcreatedAt\b/g, 'createdat');
 
         let idx = 1;
