@@ -23,15 +23,18 @@ function getAuthHeader() {
 function normalizeApplication(a) {
     if (!a) return null;
     const appId = a.applicationId || a.application_id || String(a.id);
+    const resolvedJobId = a.jobId || a.job_id || a.jobid;
     return {
         ...a,
         id: appId,
         applicationId: appId,
-        jobId: a.jobId || a.job_id,
-        employerId: a.employerId || a.employer_id || a.companyId,
-        companyId: a.companyId || a.employerId || a.employer_id,
-        candidateId: a.candidateId || a.candidate_id || a.applicantId,
-        applicantId: a.applicantId || a.candidate_id || a.candidateId,
+        jobId: resolvedJobId,
+        job_id: resolvedJobId,
+        jobid: resolvedJobId,
+        employerId: a.employerId || a.employer_id || a.companyId || a.companyid,
+        companyId: a.companyId || a.companyid || a.employerId || a.employer_id,
+        candidateId: a.candidateId || a.candidate_id || a.applicantId || a.applicantid,
+        applicantId: a.applicantId || a.applicantid || a.candidate_id || a.candidateId,
         candidateName: a.candidateName || a.candidate_name || a.applicantName || 'Candidate',
         applicantName: a.applicantName || a.candidate_name || a.candidateName || 'Candidate',
         profilePhoto: a.profilePhoto || a.profile_photo || '',
@@ -176,7 +179,7 @@ export async function getApplicationsByCompany(companyId, companyName) {
 }
 
 export async function getAllApplications() {
-    return getApplicationsByUser();
+    return getApplicationsByCompany('', '');
 }
 
 export async function updateApplicationStatus(appId, newStatus, extraData = {}) {

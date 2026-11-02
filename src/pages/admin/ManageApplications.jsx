@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getAllApplications, updateApplicationStatus } from '../../services/applicationService';
+import { getAllApplications, getApplicationsByCompany, updateApplicationStatus } from '../../services/applicationService';
 import { useAuth } from '../../contexts/AuthContext';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { format } from 'date-fns';
@@ -30,27 +30,16 @@ export default function ManageApplications() {
 
     async function loadApplications() {
         try {
-            const data = await getAllApplications();
-            let companyApps = data || [];
-
-            // If employer is logged in, filter to applications for their company/employer ID
+            let companyApps = [];
             if (userRole === 'company') {
                 const employerId = currentUser?.uid || userData?.id || userData?.employer_id;
                 const companyId = userData?.company_id || userData?.companyId || employerId;
-                const compName = userData?.companyName || userData?.company_name;
-
-                companyApps = companyApps.filter(app => {
-                    return (
-                        (employerId && (String(app.employerId) === String(employerId) || String(app.employer_id) === String(employerId))) ||
-                        (companyId && (String(app.companyId) === String(companyId) || String(app.company_id) === String(companyId))) ||
-                        (compName && app.companyName && String(app.companyName).trim().toLowerCase() === String(compName).trim().toLowerCase())
-                    );
-                });
-
-                // Fallback: if list is empty, show companyApps if only 1 employer exists
-                if (companyApps.length === 0 && data.length > 0) {
-                    companyApps = data;
-                }
+                const compName = userData?.companyName || userData?.company_name || '';
+                const data = await getApplicationsByCompany(companyId, compName);
+                companyApps = Array.isArray(data) ? data : [];
+            } else {
+                const data = await getAllApplications();
+                companyApps = Array.isArray(data) ? data : [];
             }
 
             const formatted = companyApps.map(app => {

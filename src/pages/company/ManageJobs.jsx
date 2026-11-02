@@ -207,7 +207,12 @@ export default function ManageJobs() {
                             </thead>
                             <tbody>
                                 {jobs.map(job => {
-                                    const jobApps = applications.filter(a => a.jobId === job.id || a.jobId === job.jobId || a.jobId === job.job_id);
+                                    const jobApps = applications.filter(a => {
+                                        const aJId = String(a.jobId || a.job_id || a.jobid || '').trim();
+                                        const jId = String(job.id || '').trim();
+                                        const jJobId = String(job.jobId || job.job_id || '').trim();
+                                        return Boolean(aJId && (aJId === jId || aJId === jJobId));
+                                    });
                                     const totalApps = jobApps.length;
                                     const badge = getStatusStyle(job.status || job.jobStatus);
 
@@ -242,7 +247,7 @@ export default function ManageJobs() {
                                             </td>
 
                                             <td style={{ padding: '16px 20px' }}>
-                                                <Link to={`/company/view-applicants/${job.id || job.jobId}`} style={{ textDecoration: 'none', background: '#e0f2fe', color: '#0369a1', padding: '6px 12px', borderRadius: '20px', fontWeight: 800, fontSize: '0.82rem', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                                                <Link to={`/company/view-applicants/${job.job_id || job.jobId || job.id}`} style={{ textDecoration: 'none', background: '#e0f2fe', color: '#0369a1', padding: '6px 12px', borderRadius: '20px', fontWeight: 800, fontSize: '0.82rem', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                                                     <FiUsers /> {totalApps} Applications
                                                 </Link>
                                             </td>

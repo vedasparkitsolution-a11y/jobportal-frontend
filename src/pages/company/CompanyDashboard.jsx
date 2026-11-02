@@ -137,14 +137,18 @@ export default function CompanyDashboard() {
                 return matchesName || matchesId;
             });
 
-            const employerApps = (apps || []).filter(a => {
+            const employerApps = (Array.isArray(apps) ? apps : []).filter(a => {
                 if (!currentCompNameLower && !currentCompId) return true;
                 const aCompName = (a.companyName || a.company_name || '').toLowerCase().trim();
-                const aCompId = String(a.companyId || a.company_id || a.employerId || '').trim();
+                const aCompId = String(a.companyId || a.company_id || a.employerId || a.employer_id || '').trim();
+                const currentUserId = String(currentUser?.uid || userData?.id || '').trim();
 
                 const matchesName = Boolean(currentCompNameLower && aCompName && (aCompName === currentCompNameLower));
-                const matchesId = Boolean(currentCompId && (aCompId === currentCompId));
-                return matchesName || matchesId;
+                const matchesId = Boolean(
+                    (currentCompId && (aCompId === currentCompId || String(a.employerId || a.employer_id || '').trim() === currentCompId)) ||
+                    (currentUserId && (aCompId === currentUserId || String(a.employerId || a.employer_id || '').trim() === currentUserId))
+                );
+                return matchesName || matchesId || !aCompName;
             });
 
             setStats({
