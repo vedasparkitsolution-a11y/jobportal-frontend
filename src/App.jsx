@@ -33,6 +33,8 @@ import TakeAssessment from './pages/jobseeker/TakeAssessment';
 import CareerAnalyser from './pages/jobseeker/CareerAnalyser';
 import CreateCandidateProfile from './pages/jobseeker/CreateCandidateProfile';
 import RecommendedJobs from './pages/jobseeker/RecommendedJobs';
+import ShortlistedJobs from './pages/jobseeker/ShortlistedJobs';
+import CandidateInterviews from './pages/jobseeker/CandidateInterviews';
 import CandidateSubscriptions from './pages/jobseeker/CandidateSubscriptions';
 
 // Company Pages
@@ -119,6 +121,8 @@ function App() {
                     <Route path="/jobseeker/job-alerts" element={<ProtectedRoute allowedRoles={['jobseeker']}><JobAlerts /></ProtectedRoute>} />
                     <Route path="/jobseeker/saved-jobs" element={<ProtectedRoute allowedRoles={['jobseeker']}><SavedJobs /></ProtectedRoute>} />
                     <Route path="/jobseeker/recommended-jobs" element={<ProtectedRoute allowedRoles={['jobseeker']}><RecommendedJobs /></ProtectedRoute>} />
+                    <Route path="/jobseeker/shortlisted" element={<ProtectedRoute allowedRoles={['jobseeker']}><ShortlistedJobs /></ProtectedRoute>} />
+                    <Route path="/jobseeker/interviews" element={<ProtectedRoute allowedRoles={['jobseeker']}><CandidateInterviews /></ProtectedRoute>} />
                     <Route path="/jobseeker/subscriptions" element={<ProtectedRoute allowedRoles={['jobseeker']}><CandidateSubscriptions /></ProtectedRoute>} />
                     <Route path="/jobseeker/settings" element={<ProtectedRoute allowedRoles={['jobseeker']}><AccountSettings /></ProtectedRoute>} />
                     <Route path="/candidate/analyze-career" element={<ProtectedRoute allowedRoles={['jobseeker']}><CareerAnalyser /></ProtectedRoute>} />
