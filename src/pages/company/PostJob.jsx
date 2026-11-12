@@ -724,8 +724,8 @@ export default function PostJob() {
                         </div>
 
                         {/* Work Location Type & Openings */}
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', marginBottom: '20px' }}>
-                            <div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', marginBottom: '20px', alignItems: 'stretch' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <label style={labelStyle}>Work Location Type *</label>
                                 <div style={{ display: 'flex', gap: '10px' }}>
                                     {['On-site', 'Remote', 'Hybrid'].map(mode => (
@@ -734,11 +734,13 @@ export default function PostJob() {
                                             key={mode}
                                             onClick={() => setLocationType(mode)}
                                             style={{
-                                                flex: 1, padding: '10px', borderRadius: '10px', border: '1.5px solid',
+                                                flex: 1, height: '46px', padding: '0 10px', borderRadius: '12px', border: '1.5px solid',
                                                 borderColor: locationType === mode ? '#7c3aed' : '#cbd5e1',
                                                 background: locationType === mode ? '#f5f3ff' : '#ffffff',
                                                 color: locationType === mode ? '#7c3aed' : '#475569',
-                                                fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer'
+                                                fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                whiteSpace: 'nowrap', boxSizing: 'border-box'
                                             }}
                                         >
                                             {mode}
@@ -747,12 +749,12 @@ export default function PostJob() {
                                 </div>
                             </div>
 
-                            <div>
+                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <label style={labelStyle}>Number of Openings *</label>
                                 <input
                                     type="number"
                                     min="1"
-                                    style={inputStyle}
+                                    style={{ ...inputStyle, height: '46px', padding: '0 14px', boxSizing: 'border-box' }}
                                     value={numberOfOpenings}
                                     onChange={e => setNumberOfOpenings(Math.max(1, parseInt(e.target.value) || 1))}
                                     required
@@ -1210,10 +1212,10 @@ export default function PostJob() {
                             <FiAward style={{ color: '#7c3aed' }} /> 7. Hiring Information & Priority
                         </h3>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
-                            <div>
-                                <label style={labelStyle}>How soon do you want to fill the position? *</label>
-                                <select style={inputStyle} value={hiringTimeline} onChange={e => setHiringTimeline(e.target.value)}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', alignItems: 'stretch' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                <label style={{ ...labelStyle, fontSize: '0.82rem' }}>How soon do you want to fill the position? *</label>
+                                <select style={{ ...inputStyle, height: '46px', padding: '0 14px', boxSizing: 'border-box' }} value={hiringTimeline} onChange={e => setHiringTimeline(e.target.value)}>
                                     <option value="Immediately">Immediately</option>
                                     <option value="Within 1 Week">Within 1 Week</option>
                                     <option value="1–2 Weeks">1–2 Weeks</option>
@@ -1223,9 +1225,9 @@ export default function PostJob() {
                                 </select>
                             </div>
 
-                            <div>
-                                <label style={labelStyle}>How often do you need to hire? *</label>
-                                <select style={inputStyle} value={hiringFrequency} onChange={e => setHiringFrequency(e.target.value)}>
+                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                <label style={{ ...labelStyle, fontSize: '0.82rem' }}>How often do you need to hire? *</label>
+                                <select style={{ ...inputStyle, height: '46px', padding: '0 14px', boxSizing: 'border-box' }} value={hiringFrequency} onChange={e => setHiringFrequency(e.target.value)}>
                                     <option value="One-time Hiring">One-time Hiring</option>
                                     <option value="Occasionally">Occasionally</option>
                                     <option value="Monthly">Monthly</option>
@@ -1234,20 +1236,22 @@ export default function PostJob() {
                                 </select>
                             </div>
 
-                            <div>
-                                <label style={labelStyle}>Hiring Priority *</label>
-                                <div style={{ display: 'flex', gap: '10px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                <label style={{ ...labelStyle, fontSize: '0.82rem' }}>Hiring Priority *</label>
+                                <div style={{ display: 'flex', gap: '8px' }}>
                                     {['Normal', 'Urgent'].map(prio => (
                                         <button
                                             type="button"
                                             key={prio}
                                             onClick={() => setHiringPriority(prio)}
                                             style={{
-                                                flex: 1, padding: '10px', borderRadius: '10px', border: '1.5px solid',
+                                                flex: 1, height: '46px', padding: '0 8px', borderRadius: '12px', border: '1.5px solid',
                                                 borderColor: hiringPriority === prio ? (prio === 'Urgent' ? '#ef4444' : '#7c3aed') : '#cbd5e1',
                                                 background: hiringPriority === prio ? (prio === 'Urgent' ? '#fef2f2' : '#f5f3ff') : '#ffffff',
                                                 color: hiringPriority === prio ? (prio === 'Urgent' ? '#ef4444' : '#7c3aed') : '#475569',
-                                                fontWeight: 800, fontSize: '0.85rem', cursor: 'pointer'
+                                                fontWeight: 800, fontSize: '0.79rem', cursor: 'pointer',
+                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                whiteSpace: 'nowrap', boxSizing: 'border-box'
                                             }}
                                         >
                                             {prio === 'Urgent' ? '🔥 Urgent Hiring' : 'Normal'}
@@ -1290,10 +1294,10 @@ export default function PostJob() {
                             </div>
                         </div>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
-                            <div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', alignItems: 'stretch' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <label style={labelStyle}>Notice Period Preference</label>
-                                <select style={inputStyle} value={noticePeriod} onChange={e => setNoticePeriod(e.target.value)}>
+                                <select style={{ ...inputStyle, height: '46px', padding: '0 14px', boxSizing: 'border-box' }} value={noticePeriod} onChange={e => setNoticePeriod(e.target.value)}>
                                     <option value="Immediate Joiner">Immediate Joiner</option>
                                     <option value="7 Days">7 Days</option>
                                     <option value="15 Days">15 Days</option>
@@ -1304,9 +1308,9 @@ export default function PostJob() {
                                 </select>
                             </div>
 
-                            <div>
+                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <label style={labelStyle}>Target Joining Date (Optional)</label>
-                                <input type="date" style={inputStyle} value={joiningDate} onChange={e => setJoiningDate(e.target.value)} />
+                                <input type="date" style={{ ...inputStyle, height: '46px', padding: '0 14px', boxSizing: 'border-box' }} value={joiningDate} onChange={e => setJoiningDate(e.target.value)} />
                             </div>
                         </div>
                     </div>
@@ -1736,7 +1740,8 @@ const inputStyle = {
     fontWeight: 600,
     outline: 'none',
     backgroundColor: '#ffffff',
-    color: '#0f172a'
+    color: '#0f172a',
+    boxSizing: 'border-box'
 };
 
 const shortcutBtnStyle = {
