@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { API_BASE_URL } from '../../config/api';
 import { getOpenJobs } from '../../services/jobService';
 import { getApplicationsByUser } from '../../services/applicationService';
 import JobCard from '../../components/JobCard';
@@ -13,6 +12,7 @@ import {
     FiUserCheck, FiGift, FiAward, FiAlertCircle, FiMessageSquare, FiCalendar, FiX
 } from 'react-icons/fi';
 import { useToast } from '../../components/Toast';
+import { API_BASE_URL } from '../../config/api';
 
 export default function JobSeekerDashboard() {
     const { userData, currentUser, token } = useAuth();
@@ -81,8 +81,6 @@ export default function JobSeekerDashboard() {
     ];
 
     const [searchTerm, setSearchTerm] = useState('');
-    const [shortlistedCount, setShortlistedCount] = useState(0);
-    const [interviewsCount, setInterviewsCount] = useState(0);
     const [filterType, setFilterType] = useState('All');
 
     useEffect(() => {
@@ -101,19 +99,8 @@ export default function JobSeekerDashboard() {
                 fetch(`${API_BASE_URL}/api/subscriptions/candidate-plans`).catch(() => null)
             ]);
 
-                        const allApps = Array.isArray(apps) ? apps : [];
             setRecentJobs(Array.isArray(jobs) ? jobs : []);
-            setAppCount(allApps.length);
-            const sl = allApps.filter(a => {
-                const s = String(a.applicationStatus || a.status || '').toLowerCase().trim();
-                return s.includes('shortlist') || s === 'selected' || s === 'hired';
-            }).length;
-            const itv = allApps.filter(a => {
-                const s = String(a.applicationStatus || a.status || '').toLowerCase().trim();
-                return s.includes('interview') || Boolean(a.interviewDate);
-            }).length;
-            setShortlistedCount(sl);
-            setInterviewsCount(itv);
+            setAppCount(Array.isArray(apps) ? apps.length : 0);
 
             // Set Perks
             if (perksRes && perksRes.ok) {
@@ -380,7 +367,7 @@ export default function JobSeekerDashboard() {
 
             {/* Candidate Stats Cards */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '36px' }}>
-                <div style={{ ...statCardStyle, cursor: 'pointer' }} onClick={() => navigate('/jobseeker/applications')} title="View Applied Jobs">
+                <div style={statCardStyle}>
                     <div style={{ ...iconWrapperStyle, background: '#f0f9ff', color: '#0ea5e9' }}>
                         <FiCheckCircle />
                     </div>
@@ -390,27 +377,27 @@ export default function JobSeekerDashboard() {
                     </div>
                 </div>
 
-                <div style={{ ...statCardStyle, cursor: 'pointer' }} onClick={() => navigate('/jobseeker/shortlisted')} title="View Shortlisted Jobs">
+                <div style={statCardStyle}>
                     <div style={{ ...iconWrapperStyle, background: '#f0fdf4', color: '#166534' }}>
                         <FiCheckCircle />
                     </div>
                     <div>
-                        <div style={statValStyle}>{shortlistedCount}</div>
+                        <div style={statValStyle}>0</div>
                         <div style={statLabelStyle}>Shortlisted</div>
                     </div>
                 </div>
 
-                <div style={{ ...statCardStyle, cursor: 'pointer' }} onClick={() => navigate('/jobseeker/interviews')} title="View Scheduled Interviews">
+                <div style={statCardStyle}>
                     <div style={{ ...iconWrapperStyle, background: '#f3e8ff', color: '#7e22ce' }}>
                         <FiClock />
                     </div>
                     <div>
-                        <div style={statValStyle}>{interviewsCount}</div>
+                        <div style={statValStyle}>0</div>
                         <div style={statLabelStyle}>Interviews</div>
                     </div>
                 </div>
 
-                <div style={{ ...statCardStyle, cursor: 'pointer' }} onClick={() => navigate('/jobs')} title="Browse All Open Jobs">
+                <div style={statCardStyle}>
                     <div style={{ ...iconWrapperStyle, background: '#fef3c7', color: '#b45309' }}>
                         <FiZap />
                     </div>
