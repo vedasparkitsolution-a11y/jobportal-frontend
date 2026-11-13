@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { API_BASE_URL } from '../../config/api';
 import { getJobsByCompany } from '../../services/jobService';
 import { getApplicationsByCompany } from '../../services/applicationService';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -10,6 +9,7 @@ import {
     FiBriefcase, FiZap, FiCreditCard, FiCheck, FiStar, FiArrowRight, FiShield, FiFileText 
 } from 'react-icons/fi';
 import { useToast } from '../../components/Toast';
+import { API_BASE_URL } from '../../config/api';
 
 export default function CompanyDashboard() {
     const { currentUser, userData, token } = useAuth();
@@ -137,18 +137,14 @@ export default function CompanyDashboard() {
                 return matchesName || matchesId;
             });
 
-            const employerApps = (Array.isArray(apps) ? apps : []).filter(a => {
+            const employerApps = (apps || []).filter(a => {
                 if (!currentCompNameLower && !currentCompId) return true;
                 const aCompName = (a.companyName || a.company_name || '').toLowerCase().trim();
-                const aCompId = String(a.companyId || a.company_id || a.employerId || a.employer_id || '').trim();
-                const currentUserId = String(currentUser?.uid || userData?.id || '').trim();
+                const aCompId = String(a.companyId || a.company_id || a.employerId || '').trim();
 
                 const matchesName = Boolean(currentCompNameLower && aCompName && (aCompName === currentCompNameLower));
-                const matchesId = Boolean(
-                    (currentCompId && (aCompId === currentCompId || String(a.employerId || a.employer_id || '').trim() === currentCompId)) ||
-                    (currentUserId && (aCompId === currentUserId || String(a.employerId || a.employer_id || '').trim() === currentUserId))
-                );
-                return matchesName || matchesId || !aCompName;
+                const matchesId = Boolean(currentCompId && (aCompId === currentCompId));
+                return matchesName || matchesId;
             });
 
             setStats({
@@ -285,7 +281,7 @@ export default function CompanyDashboard() {
                     </div>
                 )}
 
-                {/* Active Subscription Banner */}
+                {/* Active Subscription Banner & Upgrade Recommendations */}
                 {subscription?.hasActiveSubscription ? (
                     <div style={{
                         background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
@@ -294,35 +290,89 @@ export default function CompanyDashboard() {
                         padding: '24px 28px',
                         marginBottom: '36px',
                         border: '1px solid #334155',
-                        boxShadow: '0 10px 25px rgba(15, 23, 42, 0.12)',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        flexWrap: 'wrap',
-                        gap: '16px'
+                        boxShadow: '0 10px 25px rgba(15, 23, 42, 0.12)'
                     }}>
-                        <div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                                <span style={{ background: '#10b981', color: '#ffffff', fontSize: '0.72rem', fontWeight: 800, padding: '3px 10px', borderRadius: '10px', textTransform: 'uppercase' }}>
-                                    ✓ Currently Active Plan
-                                </span>
-                                <span style={{ color: '#94a3b8', fontSize: '0.82rem' }}>
-                                    Expires on {subscription.subscription.expiryDate ? new Date(subscription.subscription.expiryDate).toLocaleDateString('en-GB') : 'Active'} ({subscription.subscription.remainingDays || 30} days left)
-                                </span>
-                            </div>
-                            <h3 style={{ margin: '0 0 6px', fontSize: '1.35rem', fontWeight: 800, color: '#ffffff' }}>
-                                {subscription.subscription.planName} Plan Active
-                            </h3>
-                            <p style={{ margin: 0, color: '#cbd5e1', fontSize: '0.88rem' }}>
-                                🔓 {subscription.subscription.contactsRemaining !== undefined ? subscription.subscription.contactsRemaining : 'Unlimited'} Contact Views Remaining • {subscription.subscription.jobsRemaining !== undefined ? subscription.subscription.jobsRemaining : 'Active'} Job Postings
-                            </p>
-                        </div>
-                        <Link to="/company/subscriptions" style={{
-                            padding: '10px 22px', background: '#7c3aed', border: 'none',
-                            borderRadius: '10px', color: 'white', textDecoration: 'none', fontWeight: 700, fontSize: '0.88rem'
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            flexWrap: 'wrap',
+                            gap: '16px'
                         }}>
-                            Manage Subscription
-                        </Link>
+                            <div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                    <span style={{ background: '#10b981', color: '#ffffff', fontSize: '0.72rem', fontWeight: 800, padding: '3px 10px', borderRadius: '10px', textTransform: 'uppercase' }}>
+                                        ✓ Currently Active Plan
+                                    </span>
+                                    <span style={{ color: '#94a3b8', fontSize: '0.82rem' }}>
+                                        Expires on {subscription.subscription.expiryDate ? new Date(subscription.subscription.expiryDate).toLocaleDateString('en-GB') : 'Active'} ({subscription.subscription.remainingDays || 30} days left)
+                                    </span>
+                                </div>
+                                <h3 style={{ margin: '0 0 6px', fontSize: '1.45rem', fontWeight: 800, color: '#ffffff' }}>
+                                    {subscription.subscription.planName} Plan Active
+                                </h3>
+                                <p style={{ margin: 0, color: '#cbd5e1', fontSize: '0.9rem' }}>
+                                    🔓 {subscription.subscription.contactsRemaining !== undefined ? subscription.subscription.contactsRemaining : 'Unlimited'} Contact Views Remaining • {subscription.subscription.jobsRemaining !== undefined ? subscription.subscription.jobsRemaining : 'Active'} Job Postings
+                                </p>
+                            </div>
+                            <Link to="/company/subscriptions" style={{
+                                padding: '10px 22px', background: '#7c3aed', border: 'none',
+                                borderRadius: '10px', color: 'white', textDecoration: 'none', fontWeight: 700, fontSize: '0.88rem'
+                            }}>
+                                Change / Manage Plan
+                            </Link>
+                        </div>
+
+                        {/* Recommended Next Upgrade Card */}
+                        {quotaData?.nextPlan && (
+                            <div style={{
+                                marginTop: '18px',
+                                paddingTop: '16px',
+                                borderTop: '1px solid rgba(255, 255, 255, 0.12)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                flexWrap: 'wrap',
+                                gap: '12px'
+                            }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <span style={{
+                                        background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                                        color: '#ffffff',
+                                        fontSize: '0.74rem',
+                                        fontWeight: 800,
+                                        padding: '4px 10px',
+                                        borderRadius: '8px',
+                                        textTransform: 'uppercase',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '4px'
+                                    }}>
+                                        ★ Recommended Next Upgrade
+                                    </span>
+                                    <span style={{ color: '#e2e8f0', fontSize: '0.92rem', fontWeight: 600 }}>
+                                        <strong>{quotaData.nextPlan.name}</strong> ({quotaData.nextPlan.posting_limit === -1 ? 'Unlimited Jobs' : `${quotaData.nextPlan.posting_limit} Jobs`} • ₹{Number(quotaData.nextPlan.price).toLocaleString()})
+                                    </span>
+                                </div>
+                                <Link 
+                                    to="/company/subscriptions" 
+                                    style={{
+                                        background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                                        color: '#ffffff',
+                                        padding: '7px 18px',
+                                        borderRadius: '8px',
+                                        textDecoration: 'none',
+                                        fontWeight: 700,
+                                        fontSize: '0.84rem',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '6px'
+                                    }}
+                                >
+                                    Upgrade to {quotaData.nextPlan.name} →
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <div style={{
@@ -330,30 +380,62 @@ export default function CompanyDashboard() {
                         borderRadius: '20px',
                         padding: '24px 28px',
                         marginBottom: '36px',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        color: 'white',
                         border: '1px solid #334155',
-                        boxShadow: '0 10px 25px rgba(15, 23, 42, 0.12)',
-                        flexWrap: 'wrap',
-                        gap: '16px'
+                        boxShadow: '0 10px 25px rgba(15, 23, 42, 0.12)'
                     }}>
-                        <div>
-                            <span style={{ background: '#7c3aed', color: '#ffffff', fontSize: '0.72rem', fontWeight: 800, padding: '2px 8px', borderRadius: '10px', textTransform: 'uppercase', display: 'inline-block', marginBottom: '6px' }}>
-                                Recruiter Upgrade
-                            </span>
-                            <h3 style={{ margin: '0 0 4px', fontSize: '1.3rem', fontWeight: 800 }}>Unlock Full Candidate Profiles & Direct Contacts 🚀</h3>
-                            <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.92rem' }}>Subscribe to an employer plan to unlock candidate resumes, phone numbers, and export candidate lists.</p>
-                        </div>
-                        <Link to="/company/subscriptions" style={{
-                            background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
-                            border: 'none', textDecoration: 'none', padding: '12px 24px',
-                            borderRadius: '12px', fontWeight: 700, color: 'white', fontSize: '0.92rem',
-                            boxShadow: '0 4px 14px rgba(124, 58, 237, 0.35)'
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            color: 'white',
+                            flexWrap: 'wrap',
+                            gap: '16px'
                         }}>
-                            View All Plans
-                        </Link>
+                            <div>
+                                <span style={{ background: '#7c3aed', color: '#ffffff', fontSize: '0.72rem', fontWeight: 800, padding: '2px 8px', borderRadius: '10px', textTransform: 'uppercase', display: 'inline-block', marginBottom: '6px' }}>
+                                    Recruiter Upgrade
+                                </span>
+                                <h3 style={{ margin: '0 0 4px', fontSize: '1.3rem', fontWeight: 800 }}>Unlock Full Candidate Profiles & Direct Contacts 🚀</h3>
+                                <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.92rem' }}>Subscribe to an employer plan to unlock candidate resumes, phone numbers, and export candidate lists.</p>
+                            </div>
+                            <Link to="/company/subscriptions" style={{
+                                background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
+                                border: 'none', textDecoration: 'none', padding: '12px 24px',
+                                borderRadius: '12px', fontWeight: 700, color: 'white', fontSize: '0.92rem',
+                                boxShadow: '0 4px 14px rgba(124, 58, 237, 0.35)'
+                            }}>
+                                View All Plans
+                            </Link>
+                        </div>
+
+                        {/* Starter recommendation */}
+                        {quotaData?.nextPlan && (
+                            <div style={{
+                                marginTop: '16px',
+                                paddingTop: '14px',
+                                borderTop: '1px solid rgba(255, 255, 255, 0.12)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                flexWrap: 'wrap',
+                                gap: '12px'
+                            }}>
+                                <span style={{ color: '#cbd5e1', fontSize: '0.88rem' }}>
+                                    💡 Recommended Starter Package: <strong style={{ color: '#fbbf24' }}>{quotaData.nextPlan.name}</strong> (₹{Number(quotaData.nextPlan.price).toLocaleString()})
+                                </span>
+                                <Link 
+                                    to="/company/subscriptions" 
+                                    style={{
+                                        color: '#38bdf8',
+                                        textDecoration: 'none',
+                                        fontWeight: 700,
+                                        fontSize: '0.84rem'
+                                    }}
+                                >
+                                    Get Started →
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 )}
 
@@ -409,7 +491,7 @@ export default function CompanyDashboard() {
                         gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
                         gap: '20px'
                     }}>
-                        {(Array.isArray(employerPlans) ? employerPlans : []).slice(0, 3).map((plan) => {
+                        {employerPlans.slice(0, 3).map((plan) => {
                             const isCurrentActive = Boolean(subscription?.hasActiveSubscription && (
                                 String(subscription.subscription?.planId) === String(plan.id) ||
                                 (subscription.subscription?.planName && plan.name && subscription.subscription.planName.trim().toLowerCase() === plan.name.trim().toLowerCase())
@@ -472,7 +554,7 @@ export default function CompanyDashboard() {
                                     </div>
 
                                     <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                        {(Array.isArray(featuresList) ? featuresList : []).map((feat, idx) => (
+                                        {featuresList.map((feat, idx) => (
                                             <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#334155' }}>
                                                 <FiCheck style={{ color: '#16a34a', flexShrink: 0 }} />
                                                 <span>{feat}</span>
@@ -516,9 +598,9 @@ export default function CompanyDashboard() {
                             <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: '#1e293b' }}>Recent Postings</h3>
                             <Link to="/company/manage-jobs" style={{ fontSize: '0.85rem', color: '#7c3aed', fontWeight: 700, textDecoration: 'none' }}>View All →</Link>
                         </div>
-                        {(!Array.isArray(recentJobs) || recentJobs.length === 0) ? <p style={{ color: '#94a3b8' }}>No jobs posted yet.</p> : (
+                        {recentJobs.length === 0 ? <p style={{ color: '#94a3b8' }}>No jobs posted yet.</p> : (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                {(Array.isArray(recentJobs) ? recentJobs : []).map(job => (
+                                {recentJobs.map(job => (
                                     <div key={job.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '16px', borderBottom: '1px solid #f1f5f9' }}>
                                         <div>
                                             <div style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.95rem' }}>{job.title}</div>
@@ -539,9 +621,9 @@ export default function CompanyDashboard() {
                             <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: '#1e293b' }}>Latest Applicants</h3>
                             <Link to="/company/applicants" style={{ fontSize: '0.85rem', color: '#7c3aed', fontWeight: 700, textDecoration: 'none' }}>View All →</Link>
                         </div>
-                        {(!Array.isArray(recentApps) || recentApps.length === 0) ? <p style={{ color: '#94a3b8' }}>No applicants yet.</p> : (
+                        {recentApps.length === 0 ? <p style={{ color: '#94a3b8' }}>No applicants yet.</p> : (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                {(Array.isArray(recentApps) ? recentApps : []).map(app => (
+                                {recentApps.map(app => (
                                     <div key={app.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '16px', borderBottom: '1px solid #f1f5f9' }}>
                                         <div>
                                             <div style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.95rem' }}>{app.applicantName || 'Candidate'}</div>

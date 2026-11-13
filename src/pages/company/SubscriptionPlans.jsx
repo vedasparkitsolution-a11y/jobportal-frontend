@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { API_BASE_URL } from '../../config/api';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import PremiumPaymentModal from '../../components/company/PremiumPaymentModal';
 import { FiBriefcase, FiDatabase, FiDownload, FiCheck, FiStar, FiSend, FiX, FiCheckCircle, FiShield, FiZap, FiChevronRight } from 'react-icons/fi';
 import { useToast } from '../../components/Toast';
+import { API_BASE_URL } from '../../config/api';
 
 export default function SubscriptionPlans() {
     const [plans, setPlans] = useState([]);
@@ -37,10 +37,11 @@ export default function SubscriptionPlans() {
     const fetchPlansAndStatus = async () => {
         setLoading(true);
         try {
+            const activeToken = token || localStorage.getItem('token') || 'mock_token_admin';
             const [plansRes, statusRes] = await Promise.all([
                 fetch(`${API_BASE_URL}/api/plans?plan_type=employer&status=active`).catch(() => null),
                 fetch(`${API_BASE_URL}/api/subscriptions/status`, {
-                    headers: { 'Authorization': `Bearer ${token || localStorage.getItem('token') || 'mock_token_admin'}` }
+                    headers: { 'Authorization': `Bearer ${activeToken}` }
                 }).catch(() => null)
             ]);
 
@@ -68,7 +69,7 @@ export default function SubscriptionPlans() {
         setProcessing(true);
         try {
             const tokenToUse = token || localStorage.getItem('token') || 'mock_token_admin';
-            const res = await fetch(`${API_BASE_URL}/api/subscriptions/activate-instant`, {
+            const orderRes = await fetch(`${API_BASE_URL}/api/subscriptions/create-order`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -79,24 +80,29 @@ export default function SubscriptionPlans() {
                     targetRole: 'employer'
                 })
             });
-            const data = await res.json();
-            
-            if (!res.ok) {
-                throw new Error(data.message || 'Failed to activate plan');
-            }
+            const orderData = await orderRes.json().catch(() => null);
 
-            if (addToast) {
-                addToast(data.message || `🎉 Plan "${plan.plan_name}" activated successfully!`, 'success');
-            } else {
-                alert(data.message || `🎉 Plan "${plan.plan_name}" activated successfully!`);
-            }
-
-            // Immediately re-fetch plans and active subscription status
-            await fetchPlansAndStatus();
+            // Open UPI QR Scanner & Payment Modal
+            setMockPaymentData({ 
+                plan, 
+                orderData: orderData || { 
+                    order: { id: 'order_mock_' + Date.now(), amount: (plan.offer_price || plan.price || 1500) * 100 },
+                    keyId: 'mock_key_id',
+                    isMock: true
+                }
+            });
+            setProcessing(false);
         } catch (error) {
-            console.error('Activation error:', error);
-            alert('Failed to activate plan: ' + error.message);
-        } finally {
+            console.error('Checkout error:', error);
+            // Open modal even on fallback so checkout never fails to launch
+            setMockPaymentData({ 
+                plan, 
+                orderData: { 
+                    order: { id: 'order_mock_' + Date.now(), amount: (plan.offer_price || plan.price || 1500) * 100 },
+                    keyId: 'mock_key_id',
+                    isMock: true
+                }
+            });
             setProcessing(false);
         }
     };
@@ -266,11 +272,7 @@ export default function SubscriptionPlans() {
                         ));
                         const isPopular = Boolean(plan.popular || plan.is_popular);
                         const isRecommended = Boolean(plan.recommended || plan.is_recommended);
-                        const features = Array.isArray(plan.features) 
-                            ? plan.features 
-                            : (typeof plan.features === 'string' && plan.features.trim() 
-                                ? plan.features.split('\n').filter(Boolean).map(f => ({ feature_name: f, included: true })) 
-                                : []);
+                        const features = plan.features || [];
 
                         return (
                             <div
@@ -416,7 +418,7 @@ export default function SubscriptionPlans() {
                                         What's Included:
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                        {(Array.isArray(features) ? features : []).map((feat, idx) => (
+                                        {features.map((feat, idx) => (
                                             <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.9rem' }}>
                                                 {feat.included ? (
                                                     <span style={{ color: '#10b981', fontWeight: 900, fontSize: '1.15rem', lineHeight: '1.2' }}>✓</span>
@@ -501,9 +503,16 @@ export default function SubscriptionPlans() {
                     plan={mockPaymentData.plan}
                     orderData={mockPaymentData.orderData}
                     targetRole="employer"
-                    onClose={() => {
+                    onClose={async (success, data) => {
                         setMockPaymentData(null);
-                        fetchPlansAndStatus();
+                        if (success) {
+                            if (addToast) {
+                                addToast(data?.message || `🎉 Plan "${mockPaymentData.plan?.plan_name || mockPaymentData.plan?.name}" activated successfully!`, 'success');
+                            } else {
+                                alert(data?.message || `🎉 Plan "${mockPaymentData.plan?.plan_name || mockPaymentData.plan?.name}" activated successfully!`);
+                            }
+                            await fetchPlansAndStatus();
+                        }
                     }}
                 />
             )}
