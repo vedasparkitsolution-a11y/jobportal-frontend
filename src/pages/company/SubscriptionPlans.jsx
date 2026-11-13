@@ -65,6 +65,21 @@ export default function SubscriptionPlans() {
         }
     };
 
+    const loadRazorpayScript = () => {
+        return new Promise((resolve) => {
+            if (window.Razorpay) {
+                resolve(true);
+                return;
+            }
+            const script = document.createElement('script');
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            script.async = true;
+            script.onload = () => resolve(true);
+            script.onerror = () => resolve(false);
+            document.body.appendChild(script);
+        });
+    };
+
     const handleUpgrade = async (plan) => {
         setProcessing(true);
         try {
@@ -80,29 +95,95 @@ export default function SubscriptionPlans() {
                     targetRole: 'employer'
                 })
             });
-            const orderData = await orderRes.json().catch(() => null);
+            const orderData = await orderRes.json();
 
-            // Open UPI QR Scanner & Payment Modal
-            setMockPaymentData({ 
-                plan, 
-                orderData: orderData || { 
-                    order: { id: 'order_mock_' + Date.now(), amount: (plan.offer_price || plan.price || 1500) * 100 },
-                    keyId: 'mock_key_id',
-                    isMock: true
+            if (!orderRes.ok) {
+                throw new Error(orderData.message || 'Failed to initialize payment order');
+            }
+
+            await loadRazorpayScript();
+
+            if (!window.Razorpay) {
+                // If external Razorpay script is blocked, fallback to payment modal
+                setMockPaymentData({ plan, orderData });
+                setProcessing(false);
+                return;
+            }
+
+            const keyId = orderData.keyId || import.meta.env?.VITE_RAZORPAY_KEY_ID || 'rzp_test_TShLmUHYPSJNI0';
+            const planDisplayName = plan.plan_name || plan.name || 'Premium Plan';
+            const payableAmount = orderData?.order?.amount || Math.round((plan.offer_price !== undefined ? plan.offer_price : plan.price) * 100);
+
+            const options = {
+                key: keyId,
+                amount: payableAmount,
+                currency: orderData?.order?.currency || 'INR',
+                name: 'JobConnect Portal',
+                description: `${planDisplayName} Subscription`,
+                order_id: orderData?.order?.id,
+                prefill: {
+                    name: userData?.companyName || userData?.name || currentUser?.displayName || '',
+                    email: userData?.email || currentUser?.email || '',
+                    contact: userData?.phone || ''
+                },
+                theme: {
+                    color: '#2563eb'
+                },
+                handler: async function (response) {
+                    setProcessing(true);
+                    try {
+                        const verifyRes = await fetch(`${API_BASE_URL}/api/subscriptions/verify-payment`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${tokenToUse}`
+                            },
+                            body: JSON.stringify({
+                                razorpay_order_id: response.razorpay_order_id || orderData?.order?.id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature,
+                                planId: plan.id,
+                                targetRole: 'employer'
+                            })
+                        });
+
+                        const verifyData = await verifyRes.json();
+                        if (verifyRes.ok) {
+                            if (addToast) {
+                                addToast(verifyData.message || `🎉 Payment successful! Plan "${planDisplayName}" is now active!`, 'success');
+                            } else {
+                                alert(verifyData.message || `🎉 Payment successful! Plan "${planDisplayName}" is now active!`);
+                            }
+                            await fetchPlansAndStatus();
+                            navigate('/company');
+                        } else {
+                            throw new Error(verifyData.message || 'Payment verification failed');
+                        }
+                    } catch (verifyErr) {
+                        console.error('Verification error:', verifyErr);
+                        alert('Payment received but verification encountered an issue: ' + verifyErr.message);
+                    } finally {
+                        setProcessing(false);
+                    }
+                },
+                modal: {
+                    ondismiss: function () {
+                        setProcessing(false);
+                    }
                 }
+            };
+
+            const rzp = new window.Razorpay(options);
+            rzp.on('payment.failed', function (response) {
+                alert('Payment Failed: ' + (response.error?.description || 'Transaction declined'));
+                setProcessing(false);
             });
+            rzp.open();
             setProcessing(false);
+
         } catch (error) {
-            console.error('Checkout error:', error);
-            // Open modal even on fallback so checkout never fails to launch
-            setMockPaymentData({ 
-                plan, 
-                orderData: { 
-                    order: { id: 'order_mock_' + Date.now(), amount: (plan.offer_price || plan.price || 1500) * 100 },
-                    keyId: 'mock_key_id',
-                    isMock: true
-                }
-            });
+            console.error('Razorpay Checkout error:', error);
+            alert('Failed to launch Razorpay gateway: ' + error.message);
             setProcessing(false);
         }
     };

@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiCheck, FiX, FiBriefcase, FiUsers, FiChevronRight } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import { API_BASE_URL } from '../config/api';
 import { useAuth } from '../contexts/AuthContext';
 import PremiumPaymentModal from '../components/company/PremiumPaymentModal';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useToast } from '../components/Toast';
 import SEOHead from '../components/SEOHead';
+import { API_BASE_URL } from '../config/api';
 
 export default function Pricing() {
     const navigate = useNavigate();
@@ -24,13 +24,29 @@ export default function Pricing() {
         fetchPlansAndStatus();
     }, [activeRoleTab, token]);
 
+    const loadRazorpayScript = () => {
+        return new Promise((resolve) => {
+            if (window.Razorpay) {
+                resolve(true);
+                return;
+            }
+            const script = document.createElement('script');
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            script.async = true;
+            script.onload = () => resolve(true);
+            script.onerror = () => resolve(false);
+            document.body.appendChild(script);
+        });
+    };
+
     const fetchPlansAndStatus = async () => {
         setLoading(true);
         try {
+            const activeToken = token || localStorage.getItem('token');
             const [plansRes, statusRes] = await Promise.all([
                 fetch(`${API_BASE_URL}/api/plans?plan_type=${activeRoleTab}&status=active`),
-                token ? fetch(`${API_BASE_URL}/api/subscriptions/status`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                activeToken ? fetch(`${API_BASE_URL}/api/subscriptions/status`, {
+                    headers: { 'Authorization': `Bearer ${activeToken}` }
                 }).catch(() => null) : null
             ]);
             if (plansRes && plansRes.ok) {
@@ -60,11 +76,12 @@ export default function Pricing() {
         }
 
         try {
+            const tokenToUse = token || localStorage.getItem('token') || 'mock_token_admin';
             const orderRes = await fetch(`${API_BASE_URL}/api/subscriptions/create-order`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token || 'mock_token_admin'}`
+                    'Authorization': `Bearer ${tokenToUse}`
                 },
                 body: JSON.stringify({
                     planId: plan.id,
@@ -75,10 +92,62 @@ export default function Pricing() {
             const orderData = await orderRes.json();
             if (!orderRes.ok) throw new Error(orderData.message || 'Failed to create order');
 
-            setMockPaymentData({ plan, orderData });
+            await loadRazorpayScript();
+
+            if (!window.Razorpay) {
+                setMockPaymentData({ plan, orderData });
+                return;
+            }
+
+            const keyId = orderData.keyId || import.meta.env?.VITE_RAZORPAY_KEY_ID || 'rzp_test_TShLmUHYPSJNI0';
+            const planDisplayName = plan.plan_name || plan.name || 'Premium Plan';
+            const payableAmount = orderData?.order?.amount || Math.round((plan.offer_price !== undefined ? plan.offer_price : plan.price) * 100);
+
+            const options = {
+                key: keyId,
+                amount: payableAmount,
+                currency: orderData?.order?.currency || 'INR',
+                name: 'JobConnect Portal',
+                description: `${planDisplayName} Subscription`,
+                order_id: orderData?.order?.id,
+                theme: { color: '#2563eb' },
+                handler: async function (response) {
+                    try {
+                        const verifyRes = await fetch(`${API_BASE_URL}/api/subscriptions/verify-payment`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${tokenToUse}`
+                            },
+                            body: JSON.stringify({
+                                razorpay_order_id: response.razorpay_order_id || orderData?.order?.id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature,
+                                planId: plan.id,
+                                targetRole: activeRoleTab
+                            })
+                        });
+                        const verifyData = await verifyRes.json();
+                        if (verifyRes.ok) {
+                            if (addToast) addToast(verifyData.message || `🎉 Payment successful! "${planDisplayName}" activated!`, 'success');
+                            else alert(verifyData.message || `🎉 Payment successful! "${planDisplayName}" activated!`);
+                            await fetchPlansAndStatus();
+                            if (activeRoleTab === 'employer') navigate('/company');
+                            else navigate('/jobseeker');
+                        } else {
+                            throw new Error(verifyData.message || 'Payment verification failed');
+                        }
+                    } catch (vErr) {
+                        alert('Payment received but verification issue: ' + vErr.message);
+                    }
+                }
+            };
+
+            const rzp = new window.Razorpay(options);
+            rzp.open();
         } catch (err) {
             console.error('Checkout error:', err);
-            alert('Failed to initiate checkout: ' + err.message);
+            alert('Failed to initiate Razorpay checkout: ' + err.message);
         }
     };
 
