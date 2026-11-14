@@ -8,10 +8,16 @@ export default function Footer() {
                 <div className="footer-grid">
                     {/* Column 1: Brand & Social */}
                     <div className="footer-col brand-col">
-                        <Link to="/" className="footer-logo">
-                            <FiBriefcase className="logo-icon" />
-                            <span>Job<span className="logo-highlight">Connect</span></span>
+                        <Link to="/" className="footer-logo" style={{ textDecoration: 'none', display: 'inline-block', marginBottom: '12px' }}>
+                            <img 
+                                src="/images/vedaspark-logo.png" 
+                                alt="Vedaspark.pro - JOB | CONSULTANCY | PLACEMENT" 
+                                style={{ height: '42px', maxWidth: '200px', objectFit: 'contain', display: 'block' }} 
+                            />
                         </Link>
+                        <p style={{ fontSize: '0.86rem', color: '#64748b', margin: '4px 0 16px', lineHeight: 1.4 }}>
+                            <strong>Vedaspark.pro</strong> — Your trusted partner in Job Search, Human Resource Consultancy & Career Placements.
+                        </p>
 
                         <div className="connect-with-us">
                             <p className="social-title">Connect with us</p>
@@ -52,7 +58,7 @@ export default function Footer() {
                 </div>
 
                 <div className="footer-bottom-bar">
-                    <p>© {new Date().getFullYear()} JobConnect Ltd. All rights reserved.</p>
+                    <p>© {new Date().getFullYear()} Vedaspark.pro | JOB • CONSULTANCY • PLACEMENT. All rights reserved.</p>
                 </div>
             </div>
         </footer>

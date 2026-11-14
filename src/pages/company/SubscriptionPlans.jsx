@@ -118,7 +118,7 @@ export default function SubscriptionPlans() {
                 key: keyId,
                 amount: payableAmount,
                 currency: orderData?.order?.currency || 'INR',
-                name: 'JobConnect Portal',
+                name: 'Vedaspark.pro',
                 description: `${planDisplayName} Subscription`,
                 order_id: orderData?.order?.id,
                 prefill: {

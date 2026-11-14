@@ -107,7 +107,7 @@ export default function Pricing() {
                 key: keyId,
                 amount: payableAmount,
                 currency: orderData?.order?.currency || 'INR',
-                name: 'JobConnect Portal',
+                name: 'Vedaspark.pro',
                 description: `${planDisplayName} Subscription`,
                 order_id: orderData?.order?.id,
                 theme: { color: '#2563eb' },
@@ -154,7 +154,7 @@ export default function Pricing() {
     return (
         <div style={{ background: '#f8fafc', minHeight: '100vh', padding: '70px 20px', fontFamily: 'Inter, -apple-system, sans-serif' }}>
             <SEOHead
-                title="Employer & Candidate Premium Membership Plans | JobConnect"
+                title="Employer & Candidate Premium Membership Plans | Vedaspark.pro"
                 description="Flexible subscription plans for hiring managers, HR recruiters, and candidates. Unlock unlimited job postings, candidate resume views, and AI resume teardowns."
                 keywords="job portal pricing, employer membership, job posting plans, candidate premium subscription, hiring packages"
             />

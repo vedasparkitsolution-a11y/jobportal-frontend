@@ -173,7 +173,7 @@ export default function AdminReports() {
         {
             id: 'LOG-1006',
             userName: 'Super Administrator',
-            email: 'admin@jobconnect.com',
+            email: 'admin@vedaspark.pro',
             role: 'Admin',
             ipAddress: '122.178.200.55',
             location: 'Chennai, TN, India',
@@ -201,7 +201,7 @@ export default function AdminReports() {
         {
             id: 'NOTIF-8001',
             title: 'Platform Maintenance Notice: Scheduled System Update',
-            message: 'JobConnect servers will undergo scheduled infrastructure maintenance on Feb 20, 2026 from 02:00 AM to 04:00 AM IST.',
+            message: 'Vedaspark.pro servers will undergo scheduled infrastructure maintenance on Feb 20, 2026 from 02:00 AM to 04:00 AM IST.',
             channel: 'Both (In-App + Email)',
             recipient: 'All Registered Users',
             recipientCount: 14,

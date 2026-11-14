@@ -1,4 +1,4 @@
-// Dynamic Question Generation Engine for JobConnect
+// Dynamic Question Generation Engine for Vedaspark.pro
 // Generates tailored 3–5 screening questions based on job title, skills, experience, and role domain.
 
 export const STANDARD_JOINING_QUESTION = {

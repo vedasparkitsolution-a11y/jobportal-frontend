@@ -10,30 +10,66 @@ import {
     FiCheckCircle, FiInfo, FiHelpCircle, FiX, FiCheck
 } from 'react-icons/fi';
 
-export default function MyApplications() {
-    const { currentUser } = useAuth();
+const VIEW_CONFIG = {
+    all: {
+        title: 'My Applications',
+        subtitle: 'Track and manage all job applications submitted through Vedaspark.pro',
+        emptyTitle: "You haven't applied for any jobs yet.",
+        emptySubtitle: 'Explore thousands of open job opportunities matching your skills and start applying today!'
+    },
+    shortlisted: {
+        title: 'Shortlisted Jobs',
+        subtitle: 'Jobs where employers have shortlisted your application',
+        emptyTitle: 'No shortlisted jobs yet.',
+        emptySubtitle: 'Once an employer shortlists your application, it will appear here.'
+    },
+    interviews: {
+        title: 'My Interviews',
+        subtitle: 'Upcoming and completed interviews scheduled by employers',
+        emptyTitle: 'No interviews scheduled yet.',
+        emptySubtitle: 'When an employer schedules an interview with you, the details and meeting link will appear here.'
+    }
+};
+
+export default function MyApplications({ filterMode = 'all' }) {
+    const { currentUser, userData } = useAuth();
     const [applications, setApplications] = useState([]);
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedAnswersApp, setSelectedAnswersApp] = useState(null);
 
     useEffect(() => {
-        if (currentUser) {
-            loadApplications();
+        const uid = currentUser?.uid || userData?.id;
+        if (uid) {
+            loadApplications(uid);
+        } else {
+            setLoading(false);
         }
-    }, [currentUser]);
+    }, [currentUser, userData]);
 
-    async function loadApplications() {
+    async function loadApplications(uid) {
+        setLoading(true);
         try {
-            const apps = await getApplicationsByUser(currentUser.uid);
+            const apps = await getApplicationsByUser(uid);
             setApplications(apps || []);
-            const notifs = getCandidateNotifications(currentUser.uid);
+            const notifs = getCandidateNotifications(uid);
             setNotifications(notifs || []);
         } catch (err) {
             console.error(err);
         }
         setLoading(false);
     }
+
+    const filteredApplications = applications.filter(app => {
+        const s = (app.applicationStatus || app.status || '').toLowerCase();
+        if (filterMode === 'shortlisted') return s === 'shortlisted';
+        if (filterMode === 'interviews') {
+            return s === 'interview scheduled' || s === 'interview_scheduled' || s === 'interview completed' || s === 'interview_completed' || Boolean(app.interviewDate);
+        }
+        return true;
+    });
+
+    const viewConfig = VIEW_CONFIG[filterMode] || VIEW_CONFIG.all;
 
     const getStatusBadge = (status) => {
         const s = (status || 'Applied').toLowerCase();
@@ -52,8 +88,8 @@ export default function MyApplications() {
         <CandidateSidebar>
             <div style={{ maxWidth: '1050px', margin: '0 auto', paddingBottom: '60px' }}>
                 <div className="dashboard-header" style={{ marginBottom: '24px' }}>
-                    <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a' }}>My Applications</h1>
-                    <p style={{ color: '#64748b' }}>Track and manage all job applications submitted through JobConnect</p>
+                    <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a' }}>{viewConfig.title}</h1>
+                    <p style={{ color: '#64748b' }}>{viewConfig.subtitle}</p>
                 </div>
 
                 {/* Notifications Alert Banner */}
@@ -77,7 +113,7 @@ export default function MyApplications() {
                 )}
 
                 {/* Empty State */}
-                {applications.length === 0 ? (
+                {filteredApplications.length === 0 ? (
                     <div style={{
                         background: '#ffffff', borderRadius: '20px', padding: '60px 24px',
                         textAlign: 'center', border: '1px solid #e2e8f0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)'
@@ -90,18 +126,25 @@ export default function MyApplications() {
                             <FiFileText />
                         </div>
                         <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f172a', margin: '0 0 8px' }}>
-                            You haven't applied for any jobs yet.
+                            {viewConfig.emptyTitle}
                         </h3>
-                        <p style={{ color: '#64748b', maxWidth: '400px', margin: '0 auto 24px' }}>
-                            Explore thousands of open job opportunities matching your skills and start applying today!
+                        <p style={{ color: '#64748b', maxWidth: '420px', margin: '0 auto 24px' }}>
+                            {viewConfig.emptySubtitle}
                         </p>
-                        <Link to="/jobs" className="btn btn-primary btn-lg">
-                            Browse Jobs Now
-                        </Link>
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                            {filterMode !== 'all' && (
+                                <Link to="/jobseeker/applications" className="btn btn-outline btn-lg">
+                                    View Applied Jobs
+                                </Link>
+                            )}
+                            <Link to="/jobs" className="btn btn-primary btn-lg">
+                                Browse Jobs Now
+                            </Link>
+                        </div>
                     </div>
                 ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        {applications.map(app => {
+                        {filteredApplications.map(app => {
                             const badge = getStatusBadge(app.applicationStatus || app.status);
                             const rawDate = app.appliedDate || app.appliedAt;
                             let appliedStr = 'Recently';

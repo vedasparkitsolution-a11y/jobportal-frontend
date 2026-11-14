@@ -4,7 +4,7 @@ export const translations = {
     en: {
         // Navbar & Nav Links
         nav: {
-            brand: 'JobConnect',
+            brand: 'Vedaspark.pro',
             home: 'Home',
             browseJobs: 'Browse Jobs',
             candidateLogin: 'Candidate Login',
@@ -53,7 +53,7 @@ export const translations = {
             statsCompanies: 'Top Companies',
             statsCandidates: 'Happy Candidates',
             statsPlacements: 'Monthly Placements',
-            whyChooseTitle: 'Why Choose JobConnect?',
+            whyChooseTitle: 'Why Choose Vedaspark.pro?',
             whyChoose1Title: 'Verified Employers Only',
             whyChoose1Desc: 'All companies are strictly vetted with approved access verification.',
             whyChoose2Title: 'Instant Application Tracking',

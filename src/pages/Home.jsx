@@ -33,10 +33,10 @@ export default function Home() {
     const orgSchema = {
         '@context': 'https://schema.org',
         '@type': 'Organization',
-        'name': 'JobConnect',
-        'url': 'http://localhost:5173',
-        'logo': 'http://localhost:5173/og-image.png',
-        'description': "India's #1 AI-Powered Job & Hiring Portal connecting top candidate talent with verified hiring employers.",
+        'name': 'Vedaspark.pro',
+        'url': 'https://www.vedaspark.pro',
+        'logo': 'https://www.vedaspark.pro/images/vedaspark-logo.png',
+        'description': "Vedaspark.pro - Leading Job, HR Consultancy & Placement Portal connecting top candidate talent with verified hiring employers.",
         'sameAs': [
             'https://facebook.com',
             'https://twitter.com',
@@ -47,9 +47,9 @@ export default function Home() {
     return (
         <>
             <SEOHead
-                title="JobConnect | India's #1 AI-Powered Job & Hiring Portal"
-                description="Search thousands of verified jobs in Tech, Sales, HR & Finance. Recruit top talent with AI candidate matching and instant 1-on-1 career mentoring."
-                keywords="jobs in india, tech jobs, developer hiring, remote jobs, career analyzer, resume teardown, job portal"
+                title="Vedaspark.pro | JOB | CONSULTANCY | PLACEMENT"
+                description="Search thousands of verified jobs in Tech, Sales, HR & Finance. Recruit top talent with Vedaspark consultancy & placement solutions."
+                keywords="jobs in india, tech jobs, developer hiring, remote jobs, career analyzer, vedaspark, job portal, placement"
                 jsonLd={orgSchema}
             />
             {/* Hero Section */}
@@ -162,7 +162,7 @@ export default function Home() {
                         viewport={{ once: true, amount: 0.3 }}
                         variants={fadeUp}
                     >
-                        <h2>{t('home.whyChooseTitle', 'Why Choose JobConnect?')}</h2>
+                        <h2>{t('home.whyChooseTitle', 'Why Choose Vedaspark.pro?')}</h2>
                         <p>{t('home.heroSubtitle', 'Everything you need to land your next opportunity or find the right hire.')}</p>
                     </motion.div>
                     <div className="features-grid">
@@ -230,7 +230,7 @@ export default function Home() {
                         custom={1}
                         variants={fadeUp}
                     >
-                        {t('home.ctaSubtitle', 'Join thousands of professionals who found their dream job on JobConnect')}
+                        {t('home.ctaSubtitle', 'Join thousands of professionals who found their dream job on Vedaspark.pro')}
                     </motion.p>
                     <motion.div
                         style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}

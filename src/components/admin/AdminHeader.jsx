@@ -59,23 +59,21 @@ export default function AdminHeader({ toggleSidebar, isSidebarOpen }) {
                 </button>
                 <Link 
                     to="/" 
-                    title="Go to JobConnect Home"
+                    title="Go to Vedaspark.pro Home"
                     style={{ 
                         display: 'flex', 
                         alignItems: 'center', 
-                        gap: '8px', 
-                        fontSize: '1.3rem', 
-                        fontWeight: 800, 
-                        color: '#0f172a', 
                         textDecoration: 'none',
-                        letterSpacing: '-0.02em',
                         transition: 'opacity 0.2s'
                     }}
                     onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
                     onMouseLeave={e => e.currentTarget.style.opacity = '1'}
                 >
-                    <FiBriefcase style={{ color: '#0ea5e9', fontSize: '1.5rem' }} />
-                    <span>Job<span style={{ color: '#0ea5e9' }}>Connect</span></span>
+                    <img 
+                        src="/images/vedaspark-logo.png" 
+                        alt="Vedaspark.pro" 
+                        style={{ height: '36px', maxWidth: '180px', objectFit: 'contain', display: 'block' }} 
+                    />
                 </Link>
             </div>
             

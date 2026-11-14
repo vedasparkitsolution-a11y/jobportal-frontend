@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 
-const DEFAULT_SITE_NAME = 'JobConnect';
-const DEFAULT_TITLE = "JobConnect | India's #1 AI-Powered Job & Hiring Portal";
-const DEFAULT_DESC = 'Find verified high-paying jobs in Tech, Sales, Marketing, HR & Finance. Recruit top talent effortlessly with AI-powered candidate matching.';
-const DEFAULT_KEYWORDS = 'jobs in india, tech jobs, remote work, ai career analyzer, hiring portal, recruiter software, developer jobs, sales hiring';
-const DEFAULT_OG_IMAGE = 'https://jobconnect.com/og-image.png';
+const DEFAULT_SITE_NAME = 'Vedaspark.pro';
+const DEFAULT_TITLE = "Vedaspark.pro | JOB | CONSULTANCY | PLACEMENT";
+const DEFAULT_DESC = 'Vedaspark.pro - Premier Job, HR Consultancy & Placement Portal. Find verified tech, engineering, sales & corporate career opportunities.';
+const DEFAULT_KEYWORDS = 'vedaspark, vedaspark.pro, jobs, consultancy, placement, tech jobs, career opportunities, hiring portal';
+const DEFAULT_OG_IMAGE = 'https://www.vedaspark.pro/images/vedaspark-logo.png';
 
 export default function SEOHead({
     title,

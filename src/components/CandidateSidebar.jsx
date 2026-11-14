@@ -167,7 +167,7 @@ export default function CandidateSidebar({ children }) {
 
             {/* Main Content Area */}
             <div className="candidate-main" style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden', padding: 0 }}>
-                {/* Candidate Topbar with Three-Dot Button and Clickable JobConnect Logo (72px) */}
+                {/* Candidate Topbar with Three-Dot Button and Clickable Vedaspark.pro Logo (72px) */}
                 <header className="candidate-topbar" style={{ height: '72px', flexShrink: 0, padding: '0 28px', borderBottom: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxSizing: 'border-box' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                         <button 
@@ -202,23 +202,21 @@ export default function CandidateSidebar({ children }) {
                         </button>
                         <Link 
                             to="/" 
-                            title="Go to JobConnect Home"
+                            title="Go to Vedaspark.pro Home"
                             style={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
-                                gap: '8px', 
-                                fontSize: '1.3rem', 
-                                fontWeight: 800, 
-                                color: '#0f172a', 
                                 textDecoration: 'none',
-                                letterSpacing: '-0.02em',
                                 transition: 'opacity 0.2s'
                             }}
                             onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
                             onMouseLeave={e => e.currentTarget.style.opacity = '1'}
                         >
-                            <FiBriefcase style={{ color: '#0ea5e9', fontSize: '1.5rem' }} />
-                            <span>Job<span style={{ color: '#0ea5e9' }}>Connect</span></span>
+                            <img 
+                                src="/images/vedaspark-logo.png" 
+                                alt="Vedaspark.pro" 
+                                style={{ height: '36px', maxWidth: '180px', objectFit: 'contain', display: 'block' }} 
+                            />
                         </Link>
                     </div>
 

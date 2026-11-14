@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { API_BASE_URL } from '../../config/api';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useToast } from '../../components/Toast';
@@ -43,9 +42,9 @@ export default function AdminSettings() {
     // Master Settings State
     const [settings, setSettings] = useState({
         // 1. General setting
-        site_title: 'JobConnect Pro',
-        site_tagline: 'Connect Talented Jobseekers with Premier Employers',
-        site_email: 'support@jobconnect.com',
+        site_title: 'Vedaspark.pro',
+        site_tagline: 'JOB | CONSULTANCY | PLACEMENT',
+        site_email: 'support@vedaspark.pro',
         site_phone: '+91 98765 43210',
         currency_symbol: '₹',
         currency_code: 'INR',
@@ -91,11 +90,11 @@ export default function AdminSettings() {
         mail_driver: 'smtp',
         mail_host: 'smtp.gmail.com',
         mail_port: '587',
-        mail_username: 'notifications@jobconnect.com',
+        mail_username: 'notifications@vedaspark.pro',
         mail_password: '••••••••••••••••',
         mail_encryption: 'tls',
-        mail_from_address: 'no-reply@jobconnect.com',
-        mail_from_name: 'JobConnect Portal',
+        mail_from_address: 'no-reply@vedaspark.pro',
+        mail_from_name: 'Vedaspark.pro Portal',
         sms_gateway: 'twilio',
         sms_sender_id: 'JOBCON',
         sms_api_key: 'tw_live_99a8b7c6d5e4',
@@ -122,10 +121,10 @@ export default function AdminSettings() {
         bank_instructions: 'Please include your Order ID or registered email in payment remarks.',
 
         // 7. SEO Configuration
-        meta_title: "JobConnect | India's #1 AI-Powered Job & Talent Portal",
-        meta_description: 'Find verified high-paying jobs in IT, Marketing, Finance & AI. Recruit vetted talent effortlessly with smart matchmaking.',
-        meta_keywords: 'jobs in india, tech jobs, remote work, ai career analyzer, hiring portal, recruiter software',
-        og_title: 'JobConnect - Discover Your Dream Career',
+        meta_title: "Vedaspark.pro | JOB | CONSULTANCY | PLACEMENT",
+        meta_description: 'Find verified high-paying jobs in IT, Marketing, Finance & Engineering with Vedaspark.pro.',
+        meta_keywords: 'vedaspark, vedaspark.pro, jobs, consultancy, placement, tech jobs, hiring portal',
+        og_title: 'Vedaspark.pro - Discover Your Dream Career',
         og_description: 'Empowering 50,000+ candidates and top tech enterprises with real-time job matching and career roadmaps.',
         og_image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&auto=format&fit=crop&q=80',
         twitter_card_type: 'summary_large_image',
@@ -145,7 +144,7 @@ export default function AdminSettings() {
         stat_hired_rate: '98.4%',
         show_featured_companies: 'true',
         show_testimonials: 'true',
-        footer_copyright: '© 2026 JobConnect Portal Inc. All rights reserved.',
+        footer_copyright: '© 2026 Vedaspark.pro | JOB • CONSULTANCY • PLACEMENT. All rights reserved.',
 
         // 9. Manage pages
         pages_json: JSON.stringify([
@@ -216,9 +215,9 @@ export default function AdminSettings() {
         cron_backup_last_run: '2026-08-17 02:00:00',
 
         // 14. Policy pages
-        privacy_policy_content: `# Privacy Policy\n\n**Effective Date:** August 15, 2026\n\nJobConnect is dedicated to protecting your privacy. This policy outlines our practices concerning data collection, candidate profile confidentiality, employer vetting, and data export agreements.`,
-        terms_conditions_content: `# Terms and Conditions\n\n**Last Updated:** August 15, 2026\n\nBy accessing or using the JobConnect platform, employers and jobseekers agree to be bound by these Terms of Service.`,
-        refund_policy_content: `# Refund & Cancellation Policy\n\nAll premium subscription purchases on JobConnect carry a 7-day conditional refund window if candidate unlocks or job posting limits have not been actively utilized.`,
+        privacy_policy_content: `# Privacy Policy\n\n**Effective Date:** August 15, 2026\n\nVedaspark.pro is dedicated to protecting your privacy. This policy outlines our practices concerning data collection, candidate profile confidentiality, employer vetting, and data export agreements.`,
+        terms_conditions_content: `# Terms and Conditions\n\n**Last Updated:** August 15, 2026\n\nBy accessing or using the Vedaspark.pro platform, employers and jobseekers agree to be bound by these Terms of Service.`,
+        refund_policy_content: `# Refund & Cancellation Policy\n\nAll premium subscription purchases on Vedaspark.pro carry a 7-day conditional refund window if candidate unlocks or job posting limits have not been actively utilized.`,
         posting_guidelines_content: `# Employer Job Posting Guidelines\n\n1. All job listings must represent genuine, active employment opportunities.\n2. No discriminatory language or upfront fee requests to jobseekers.`,
         policy_last_updated: 'August 15, 2026',
 
@@ -242,8 +241,8 @@ export default function AdminSettings() {
 
         // 17. Custom CSS
         custom_header_css: `/* Custom Portal Global Overrides */\n.btn-primary:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);\n}`,
-        custom_footer_js: `// Custom Analytics or Chat Init\nconsole.log('JobConnect Custom Portal Scripts Active');`,
-        custom_header_meta: `<!-- Custom Verification Tags -->\n<meta name="portal-verification" content="jobconnect-verified-2026" />`,
+        custom_footer_js: `// Custom Analytics or Chat Init\nconsole.log('Vedaspark.pro Custom Portal Scripts Active');`,
+        custom_header_meta: `<!-- Custom Verification Tags -->\n<meta name="portal-verification" content="vedaspark-verified-2026" />`,
 
         // 18. Sitemap XML
         sitemap_enabled: 'true',
@@ -252,7 +251,7 @@ export default function AdminSettings() {
         sitemap_include_blogs: 'true',
         sitemap_frequency: 'daily',
         sitemap_priority: '0.8',
-        sitemap_custom_urls: 'https://jobconnect.com/career-tips\nhttps://jobconnect.com/salary-guide',
+        sitemap_custom_urls: 'https://vedaspark.pro/career-tips\nhttps://vedaspark.pro/salary-guide',
         sitemap_last_generated: '2026-08-19 04:30:00',
 
         // 19. Robots txt
@@ -324,8 +323,8 @@ export default function AdminSettings() {
     const fetchSettings = async () => {
         try {
             setLoading(true);
-            const res = await fetch(`${API_BASE_URL}/api/settings/all`, {
-                headers: (token || localStorage.getItem('token')) ? { Authorization: `Bearer ${token || localStorage.getItem('token')}` } : {}
+            const res = await fetch('http://localhost:5000/api/settings/all', {
+                headers: token ? { Authorization: `Bearer ${token}` } : {}
             });
             if (res.ok) {
                 const data = await res.json();
@@ -351,11 +350,11 @@ export default function AdminSettings() {
         if (e) e.preventDefault();
         setSaving(true);
         try {
-            const res = await fetch(`${API_BASE_URL}/api/settings/all`, {
+            const res = await fetch('http://localhost:5000/api/settings/all', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token || localStorage.getItem('token') || ''}`
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify(settings)
             });
@@ -379,11 +378,11 @@ export default function AdminSettings() {
         }
         setTestingEmail(true);
         try {
-            const res = await fetch(`${API_BASE_URL}/api/settings/test-email`, {
+            const res = await fetch('http://localhost:5000/api/settings/test-email', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token || localStorage.getItem('token') || ''}`
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     testEmail: testEmailAddress,
@@ -409,11 +408,11 @@ export default function AdminSettings() {
     const handleTriggerCron = async (cronKey, cronName) => {
         setCronExecuting(prev => ({ ...prev, [cronKey]: true }));
         try {
-            const res = await fetch(`${API_BASE_URL}/api/settings/trigger-cron`, {
+            const res = await fetch('http://localhost:5000/api/settings/trigger-cron', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token || localStorage.getItem('token') || ''}`
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify({ cronKey, cronName })
             });
@@ -865,9 +864,9 @@ export default function AdminSettings() {
                     {activeTab === 'general' && (
                         <div>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px' }}>
-                                {renderInput('site_title', 'Platform Title / Name *', 'text', 'e.g. JobConnect Pro')}
-                                {renderInput('site_tagline', 'Site Tagline / Slogan', 'text', 'e.g. Find Your Dream Job with AI')}
-                                {renderInput('site_email', 'Official Support Email', 'email', 'support@jobconnect.com')}
+                                {renderInput('site_title', 'Platform Title / Name *', 'text', 'e.g. Vedaspark.pro')}
+                                {renderInput('site_tagline', 'Site Tagline / Slogan', 'text', 'e.g. JOB | CONSULTANCY | PLACEMENT')}
+                                {renderInput('site_email', 'Official Support Email', 'email', 'support@vedaspark.pro')}
                                 {renderInput('site_phone', 'Support Phone / Helpline', 'text', '+91 98765 43210')}
                                 {renderInput('currency_symbol', 'Currency Symbol', 'text', '₹ or $')}
                                 {renderInput('currency_code', 'Currency ISO Code', 'text', 'INR or USD')}
@@ -1130,10 +1129,10 @@ export default function AdminSettings() {
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
                                     {renderInput('mail_host', 'SMTP Host', 'text', 'smtp.gmail.com')}
                                     {renderInput('mail_port', 'SMTP Port', 'text', '587 or 465')}
-                                    {renderInput('mail_username', 'SMTP Username / Email', 'text', 'notifications@jobconnect.com')}
+                                    {renderInput('mail_username', 'SMTP Username / Email', 'text', 'notifications@vedaspark.pro')}
                                     {renderInput('mail_password', 'SMTP Password / App Key', 'password', '••••••••••••••••')}
-                                    {renderInput('mail_from_address', 'Sender "From" Email Address', 'email', 'no-reply@jobconnect.com')}
-                                    {renderInput('mail_from_name', 'Sender "From" Display Name', 'text', 'JobConnect Notifications')}
+                                    {renderInput('mail_from_address', 'Sender "From" Email Address', 'email', 'no-reply@vedaspark.pro')}
+                                    {renderInput('mail_from_name', 'Sender "From" Display Name', 'text', 'Vedaspark.pro Notifications')}
                                 </div>
 
                                 <div style={{
@@ -1276,7 +1275,7 @@ export default function AdminSettings() {
                                 {renderToggle('bank_transfer_enabled', 'Enable Offline Bank Transfer')}
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
                                     {renderInput('bank_name', 'Bank Name', 'text', 'e.g. HDFC Bank Ltd.')}
-                                    {renderInput('bank_account_name', 'Beneficiary Account Name', 'text', 'e.g. JobConnect Global Tech Pvt Ltd')}
+                                    {renderInput('bank_account_name', 'Beneficiary Account Name', 'text', 'e.g. Vedaspark Solutions Pvt Ltd')}
                                     {renderInput('bank_account_number', 'Account Number', 'text', '50200088991122')}
                                     {renderInput('bank_ifsc', 'IFSC / SWIFT Code', 'text', 'HDFC0001234')}
                                 </div>
@@ -1301,24 +1300,24 @@ export default function AdminSettings() {
                                 </div>
                                 <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', maxWidth: '650px' }}>
                                     <div style={{ fontSize: '0.8rem', color: '#202124', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                        <span style={{ color: '#202124', fontWeight: 600 }}>jobconnect.com</span>
+                                        <span style={{ color: '#202124', fontWeight: 600 }}>vedaspark.pro</span>
                                         <span style={{ color: '#5f6368' }}>› jobs › portal</span>
                                     </div>
                                     <div style={{ fontSize: '1.25rem', color: '#1a0dab', fontWeight: 500, marginBottom: '4px', cursor: 'pointer', lineHeight: 1.3 }}>
-                                        {settings.meta_title || 'JobConnect | AI-Powered Job Portal'}
+                                        {settings.meta_title || 'Vedaspark.pro | JOB | CONSULTANCY | PLACEMENT'}
                                     </div>
                                     <div style={{ fontSize: '0.85rem', color: '#4d5156', lineHeight: 1.4 }}>
-                                        {settings.meta_description || 'Search thousands of active jobs from verified companies. Get hired faster with AI career analyzer.'}
+                                        {settings.meta_description || 'Search thousands of active jobs from verified companies. Get hired faster with Vedaspark placement.'}
                                     </div>
                                 </div>
                             </div>
 
-                            {renderInput('meta_title', 'Meta Title (Recommended 50-60 characters)', 'text', 'JobConnect | India\'s #1 Job Portal')}
+                            {renderInput('meta_title', 'Meta Title (Recommended 50-60 characters)', 'text', 'Vedaspark.pro | JOB | CONSULTANCY | PLACEMENT')}
                             {renderInput('meta_description', 'Meta Description (Recommended 150-160 characters)', 'text', 'Find verified high-paying jobs in IT, Marketing...')}
                             {renderInput('meta_keywords', 'Meta Keywords (Comma separated)', 'text', 'jobs, tech careers, hiring, resume builder, recruiters')}
 
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px', marginTop: '10px' }}>
-                                {renderInput('og_title', 'Open Graph (OG) Title for Social Sharing', 'text', 'JobConnect - Discover Dream Careers')}
+                                {renderInput('og_title', 'Open Graph (OG) Title for Social Sharing', 'text', 'Vedaspark.pro - Discover Dream Careers')}
                                 {renderInput('og_image', 'OG Share Image URL (1200x630)', 'text', 'https://.../og-banner.jpg')}
                                 {renderInput('google_analytics_id', 'Google Analytics (GA4) Tracking ID', 'text', 'G-8X9Y7Z6W5V')}
                                 {renderInput('google_search_console_code', 'Google Search Console Verification Token', 'text', 'googlesearchverificationtoken...')}
@@ -1352,7 +1351,7 @@ export default function AdminSettings() {
                             <div style={{ marginTop: '16px' }}>
                                 {renderToggle('show_featured_companies', 'Display "Top Hiring Companies" Carousel on Homepage')}
                                 {renderToggle('show_testimonials', 'Display "Jobseeker Reviews & Testimonials" on Homepage')}
-                                {renderInput('footer_copyright', 'Footer Copyright Line', 'text', '© 2026 JobConnect Portal Inc. All rights reserved.')}
+                                {renderInput('footer_copyright', 'Footer Copyright Line', 'text', '© 2026 Vedaspark.pro | JOB • CONSULTANCY • PLACEMENT. All rights reserved.')}
                             </div>
                         </div>
                     )}
@@ -2161,7 +2160,7 @@ export default function AdminSettings() {
                                     rows="4"
                                     value={settings.sitemap_custom_urls || ''}
                                     onChange={e => handleSettingChange('sitemap_custom_urls', e.target.value)}
-                                    placeholder="https://jobconnect.com/career-tips&#10;https://jobconnect.com/salary-guide"
+                                    placeholder="https://vedaspark.pro/career-tips&#10;https://vedaspark.pro/salary-guide"
                                     style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #cbd5e1', fontFamily: 'monospace', fontSize: '0.86rem', boxSizing: 'border-box' }}
                                 />
                             </div>
@@ -2386,7 +2385,7 @@ export default function AdminSettings() {
                                                         'Hyderabad': { lat: 17.3850, lng: 78.4867 }
                                                     }[c];
                                                     try {
-                                                        const res = await fetch(`${API_BASE_URL}/api/jobs/nearby?lat=${coords.lat}&lng=${coords.lng}&radius=${simRadius}`);
+                                                        const res = await fetch(`http://localhost:5000/api/jobs/nearby?lat=${coords.lat}&lng=${coords.lng}&radius=${simRadius}`);
                                                         const data = await res.json();
                                                         setSimJobsFound(data.jobs || []);
                                                     } catch (e) {

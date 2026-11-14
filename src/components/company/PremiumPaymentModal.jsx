@@ -30,8 +30,8 @@ export default function PremiumPaymentModal({
     const role = targetRole || (userRole === 'jobseeker' ? 'candidate' : 'employer');
     const planName = plan?.plan_name || plan?.name || orderData?.plan?.name || 'Premium Plan';
 
-    const merchantVpa = 'jobconnect.official@okhdfcbank';
-    const upiPayload = `upi://pay?pa=${merchantVpa}&pn=JobConnect%20Portal&am=${displayPrice}&cu=INR&tn=${encodeURIComponent(planName + ' Subscription')}`;
+    const merchantVpa = 'vedaspark.official@okhdfcbank';
+    const upiPayload = `upi://pay?pa=${merchantVpa}&pn=Vedaspark.pro&am=${displayPrice}&cu=INR&tn=${encodeURIComponent(planName + ' Subscription')}`;
     const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiPayload)}&margin=8`;
 
     // 5-minute countdown timer
@@ -152,7 +152,7 @@ export default function PremiumPaymentModal({
             key: keyId,
             amount: orderData?.order?.amount || Math.round(displayPrice * 100),
             currency: orderData?.order?.currency || 'INR',
-            name: 'JobConnect Portal',
+            name: 'Vedaspark.pro',
             description: `${planName} Subscription`,
             order_id: orderData?.order?.id,
             handler: function (response) {

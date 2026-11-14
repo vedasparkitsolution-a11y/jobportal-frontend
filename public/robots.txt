@@ -1,4 +1,4 @@
-# JobConnect Robots.txt
+# Vedaspark.pro Robots.txt
 User-agent: *
 Allow: /
 Allow: /jobs
@@ -16,5 +16,4 @@ Disallow: /company/
 Disallow: /jobseeker/
 Disallow: /api/
 
-Sitemap: http://localhost:5000/sitemap.xml
-Sitemap: http://localhost:5173/sitemap.xml
+Sitemap: https://www.vedaspark.pro/sitemap.xml

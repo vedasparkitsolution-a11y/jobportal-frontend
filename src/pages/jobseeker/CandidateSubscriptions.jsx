@@ -4,8 +4,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import CandidateSidebar from '../../components/CandidateSidebar';
 import PremiumPaymentModal from '../../components/company/PremiumPaymentModal';
-import { 
-    FiCheck, FiStar, FiZap, FiShield, FiTrendingUp, FiAward, 
+import {
+    FiCheck, FiStar, FiZap, FiShield, FiTrendingUp, FiAward,
     FiUserCheck, FiMessageSquare, FiFileText, FiClock, FiCheckCircle, FiX,
     FiGift, FiTag, FiCalendar, FiArrowRight, FiChevronRight, FiBriefcase
 } from 'react-icons/fi';
@@ -204,8 +204,8 @@ export default function CandidateSubscriptions() {
     };
 
     const handleSelectPlan = async (plan, offer = null) => {
-        const finalPrice = offer 
-            ? offer.offer_price 
+        const finalPrice = offer
+            ? offer.offer_price
             : (plan.offer_price !== undefined ? plan.offer_price : (plan.price !== undefined ? plan.price : 299));
 
         setProcessingPlanId(plan.id);
@@ -276,7 +276,7 @@ export default function CandidateSubscriptions() {
                 key: keyId,
                 amount: payableAmount,
                 currency: orderData?.order?.currency || 'INR',
-                name: 'JobConnect Portal',
+                name: 'Vedaspark.pro',
                 description: `${planDisplayName} Candidate Subscription`,
                 order_id: orderData?.order?.id,
                 prefill: {
@@ -366,7 +366,7 @@ export default function CandidateSubscriptions() {
     return (
         <CandidateSidebar>
             <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-                
+
                 {/* ── TOP HEADER ── */}
                 <div style={{ textAlign: 'center', marginBottom: '32px' }}>
                     <span style={{
@@ -467,8 +467,8 @@ export default function CandidateSubscriptions() {
                                         display: 'flex',
                                         flexDirection: 'column',
                                         position: 'relative',
-                                        boxShadow: isPopular 
-                                            ? '0 16px 36px rgba(245, 158, 11, 0.18)' 
+                                        boxShadow: isPopular
+                                            ? '0 16px 36px rgba(245, 158, 11, 0.18)'
                                             : (isRecommended ? '0 16px 36px rgba(59, 130, 246, 0.14)' : '0 4px 20px rgba(0,0,0,0.03)'),
                                         transform: isPopular ? 'scale(1.02)' : 'none',
                                         transition: 'transform 0.2s ease, box-shadow 0.2s ease'
@@ -481,8 +481,8 @@ export default function CandidateSubscriptions() {
                                             top: '-14px',
                                             left: '50%',
                                             transform: 'translateX(-50%)',
-                                            background: isPopular 
-                                                ? 'linear-gradient(135deg, #f59e0b, #d97706)' 
+                                            background: isPopular
+                                                ? 'linear-gradient(135deg, #f59e0b, #d97706)'
                                                 : (isRecommended ? 'linear-gradient(135deg, #3b82f6, #1d4ed8)' : '#0ea5e9'),
                                             color: '#ffffff',
                                             fontSize: '0.74rem',
@@ -544,8 +544,8 @@ export default function CandidateSubscriptions() {
                                             padding: '14px',
                                             borderRadius: '14px',
                                             border: 'none',
-                                            background: isFree 
-                                                ? '#f1f5f9' 
+                                            background: isFree
+                                                ? '#f1f5f9'
                                                 : (isPopular ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'linear-gradient(135deg, #fbbf24, #f59e0b)'),
                                             color: isFree ? '#334155' : '#0f172a',
                                             fontWeight: 900,
@@ -579,7 +579,7 @@ export default function CandidateSubscriptions() {
                                                     <div style={{ flex: 1, color: feat.included ? '#1e293b' : '#94a3b8', fontWeight: feat.included ? 600 : 400, lineHeight: 1.35 }}>
                                                         {feat.feature_name}
                                                         {feat.feature_value && (
-                                                             <span style={{
+                                                            <span style={{
                                                                 marginLeft: '6px',
                                                                 fontSize: '0.74rem',
                                                                 fontWeight: 700,

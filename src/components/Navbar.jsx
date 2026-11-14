@@ -92,9 +92,12 @@ export default function Navbar() {
             transition: 'all 0.3s ease'
         }}>
             <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.5rem', fontWeight: 800, color: '#0f172a', textDecoration: 'none' }}>
-                    <FiBriefcase style={{ color: '#0ea5e9', fontSize: '1.8rem' }} />
-                    <span>Job<span style={{ color: '#0ea5e9' }}>Connect</span></span>
+                <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }} title="Vedaspark.pro | JOB | CONSULTANCY | PLACEMENT">
+                    <img 
+                        src="/images/vedaspark-logo.png" 
+                        alt="Vedaspark.pro - JOB | CONSULTANCY | PLACEMENT" 
+                        style={{ height: '46px', maxWidth: '220px', objectFit: 'contain', display: 'block' }} 
+                    />
                 </Link>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>

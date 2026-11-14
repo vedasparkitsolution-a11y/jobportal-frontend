@@ -209,7 +209,7 @@ function JobDetailsContent() {
     const jobTitle = job.job_title || job.title || job.jobTitle || 'Job Opening';
     const companyName = job.company_name || job.companyName || 'Verified Company';
     const locationStr = job.job_location || job.location || 'India';
-    const jobDescStr = job.job_description || job.description || job.jobDescription || 'Full job details and requirements on JobConnect.';
+    const jobDescStr = job.job_description || job.description || job.jobDescription || 'Full job details and requirements on Vedaspark.pro.';
 
     const empTypeMap = {
         'Full Time': 'FULL_TIME',
