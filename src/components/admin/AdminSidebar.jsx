@@ -145,7 +145,7 @@ export default function AdminSidebar({ onClose }) {
                         </div>
                         <div>
                             <h2 style={{ fontSize: '1.18rem', fontWeight: 800, margin: 0, color: '#0f172a', letterSpacing: '-0.02em' }}>
-                                Job<span style={{ color: '#2563eb' }}>Connect</span>
+                                Vedaspark<span style={{ color: '#ec4899' }}>.pro</span>
                             </h2>
                             <span style={{ color: '#64748b', fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
                                 Admin Console

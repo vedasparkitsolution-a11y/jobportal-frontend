@@ -59,14 +59,16 @@ export default function CandidateSidebar({ children }) {
                         flexShrink: 0,
                         boxSizing: 'border-box'
                     }}>
-                        <div>
-                            <h2 style={{ fontSize: '1.35rem', fontWeight: 800, margin: 0, color: '#0f172a', letterSpacing: '-0.02em' }}>
-                                Job<span style={{ color: '#0ea5e9' }}>Connect</span>
-                            </h2>
-                            <p style={{ margin: '2px 0 0', color: '#64748b', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        <Link to="/" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column' }} title="Vedaspark.pro">
+                            <img 
+                                src="/images/vedaspark-logo.png" 
+                                alt="Vedaspark.pro" 
+                                style={{ height: '34px', maxWidth: '170px', objectFit: 'contain', display: 'block' }} 
+                            />
+                            <p style={{ margin: '3px 0 0', color: '#64748b', fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                 Candidate Portal
                             </p>
-                        </div>
+                        </Link>
 
                         {/* Close X Button */}
                         <button

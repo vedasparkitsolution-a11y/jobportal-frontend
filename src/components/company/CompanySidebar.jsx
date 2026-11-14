@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { 
     FiHome, FiPlusSquare, FiBriefcase, 
@@ -55,14 +55,16 @@ export default function CompanySidebar({ onClose }) {
                 flexShrink: 0,
                 boxSizing: 'border-box'
             }}>
-                <div>
-                    <h2 style={{ fontSize: '1.35rem', fontWeight: 800, margin: 0, color: '#1e293b', letterSpacing: '-0.02em' }}>
-                        <span style={{ color: '#7c3aed' }}>Job</span>Connect
-                    </h2>
-                    <p style={{ margin: '2px 0 0', color: '#64748b', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <Link to="/" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column' }} title="Vedaspark.pro">
+                    <img 
+                        src="/images/vedaspark-logo.png" 
+                        alt="Vedaspark.pro" 
+                        style={{ height: '34px', maxWidth: '170px', objectFit: 'contain', display: 'block' }} 
+                    />
+                    <p style={{ margin: '3px 0 0', color: '#64748b', fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                         Employer Portal
                     </p>
-                </div>
+                </Link>
 
                 {onClose && (
                     <button
