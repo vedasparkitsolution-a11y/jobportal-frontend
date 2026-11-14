@@ -50,9 +50,14 @@ export default function Footer() {
 
                     {/* Column 3: Legal & Policy */}
                     <div className="footer-col">
+                        <p style={{ fontSize: '0.9rem', fontWeight: 700, color: '#1e293b', marginBottom: '12px' }}>
+                            Legal &amp; Compliance
+                        </p>
                         <ul className="footer-link-list">
-                            <li><Link to="/privacy">Privacy policy</Link></li>
-                            <li><Link to="/terms">Terms & conditions</Link></li>
+                            <li><Link to="/privacy">Privacy Policy</Link></li>
+                            <li><Link to="/terms">Terms of Use</Link></li>
+                            <li><Link to="/payment-policy">Payment Policy</Link></li>
+                            <li><Link to="/refund-policy">Return &amp; Refund Policy</Link></li>
                         </ul>
                     </div>
                 </div>

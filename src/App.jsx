@@ -17,6 +17,10 @@ import BrowseJobs from './pages/BrowseJobs';
 import JobDetails from './pages/JobDetails';
 import Blog from './pages/Blog';
 import DashboardSelection from './pages/DashboardSelection';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfUse from './pages/TermsOfUse';
+import PaymentPolicy from './pages/PaymentPolicy';
+import ReturnRefundPolicy from './pages/ReturnRefundPolicy';
 
 // Job Seeker Pages
 import JobSeekerDashboard from './pages/jobseeker/JobSeekerDashboard';
@@ -33,8 +37,6 @@ import TakeAssessment from './pages/jobseeker/TakeAssessment';
 import CareerAnalyser from './pages/jobseeker/CareerAnalyser';
 import CreateCandidateProfile from './pages/jobseeker/CreateCandidateProfile';
 import RecommendedJobs from './pages/jobseeker/RecommendedJobs';
-import ShortlistedJobs from './pages/jobseeker/ShortlistedJobs';
-import CandidateInterviews from './pages/jobseeker/CandidateInterviews';
 import CandidateSubscriptions from './pages/jobseeker/CandidateSubscriptions';
 
 // Company Pages
@@ -106,6 +108,18 @@ function App() {
                         <Route path="/blog" element={<Blog />} />
                         <Route path="/dashboard" element={<DashboardSelection />} />
 
+                        {/* Legal & Compliance Routes */}
+                        <Route path="/privacy" element={<PrivacyPolicy />} />
+                        <Route path="/privacy-policy" element={<Navigate to="/privacy" replace />} />
+                        <Route path="/terms" element={<TermsOfUse />} />
+                        <Route path="/terms-and-conditions" element={<Navigate to="/terms" replace />} />
+                        <Route path="/terms-of-use" element={<Navigate to="/terms" replace />} />
+                        <Route path="/payment-policy" element={<PaymentPolicy />} />
+                        <Route path="/refund-policy" element={<ReturnRefundPolicy />} />
+                        <Route path="/return-refund-policy" element={<Navigate to="/refund-policy" replace />} />
+                        <Route path="/refund" element={<Navigate to="/refund-policy" replace />} />
+                        <Route path="/cancellation-policy" element={<Navigate to="/refund-policy" replace />} />
+
                     </Route>
 
                     {/* Dashboard-style routes for Job Seeker / Candidate */}
@@ -114,6 +128,8 @@ function App() {
                     <Route path="/jobseeker/jobs" element={<ProtectedRoute allowedRoles={['jobseeker']}><BrowseJobs /></ProtectedRoute>} />
                     <Route path="/jobseeker/profile" element={<ProtectedRoute allowedRoles={['jobseeker']}><JobSeekerProfile /></ProtectedRoute>} />
                     <Route path="/jobseeker/applications" element={<ProtectedRoute allowedRoles={['jobseeker']}><MyApplications /></ProtectedRoute>} />
+                    <Route path="/jobseeker/shortlisted" element={<ProtectedRoute allowedRoles={['jobseeker']}><MyApplications filterMode="shortlisted" /></ProtectedRoute>} />
+                    <Route path="/jobseeker/interviews" element={<ProtectedRoute allowedRoles={['jobseeker']}><MyApplications filterMode="interviews" /></ProtectedRoute>} />
                     <Route path="/jobseeker/assessments" element={<ProtectedRoute allowedRoles={['jobseeker']}><AvailableAssessments /></ProtectedRoute>} />
                     <Route path="/jobseeker/assessments/take/:id" element={<ProtectedRoute allowedRoles={['jobseeker']}><TakeAssessment /></ProtectedRoute>} />
                     <Route path="/jobseeker/resume" element={<ProtectedRoute allowedRoles={['jobseeker']}><ResumeUpload /></ProtectedRoute>} />
@@ -121,8 +137,6 @@ function App() {
                     <Route path="/jobseeker/job-alerts" element={<ProtectedRoute allowedRoles={['jobseeker']}><JobAlerts /></ProtectedRoute>} />
                     <Route path="/jobseeker/saved-jobs" element={<ProtectedRoute allowedRoles={['jobseeker']}><SavedJobs /></ProtectedRoute>} />
                     <Route path="/jobseeker/recommended-jobs" element={<ProtectedRoute allowedRoles={['jobseeker']}><RecommendedJobs /></ProtectedRoute>} />
-                    <Route path="/jobseeker/shortlisted" element={<ProtectedRoute allowedRoles={['jobseeker']}><ShortlistedJobs /></ProtectedRoute>} />
-                    <Route path="/jobseeker/interviews" element={<ProtectedRoute allowedRoles={['jobseeker']}><CandidateInterviews /></ProtectedRoute>} />
                     <Route path="/jobseeker/subscriptions" element={<ProtectedRoute allowedRoles={['jobseeker']}><CandidateSubscriptions /></ProtectedRoute>} />
                     <Route path="/jobseeker/settings" element={<ProtectedRoute allowedRoles={['jobseeker']}><AccountSettings /></ProtectedRoute>} />
                     <Route path="/candidate/analyze-career" element={<ProtectedRoute allowedRoles={['jobseeker']}><CareerAnalyser /></ProtectedRoute>} />

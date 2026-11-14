@@ -590,7 +590,18 @@ export default function PremiumPaymentModal({
                             fontSize: '0.75rem',
                             fontWeight: 600
                         }}>
-                            <FiShield /> 256-Bit Encrypted & NPCI / Razorpay Verified Transaction
+                            <FiShield /> 256-Bit Encrypted &amp; NPCI / Razorpay Verified Transaction
+                        </div>
+                        <div style={{
+                            marginTop: '8px',
+                            textAlign: 'center',
+                            fontSize: '0.72rem',
+                            color: '#94a3b8'
+                        }}>
+                            By paying, you accept our{' '}
+                            <a href="/terms" target="_blank" rel="noreferrer" style={{ color: '#6366f1', textDecoration: 'underline' }}>Terms</a>,{' '}
+                            <a href="/payment-policy" target="_blank" rel="noreferrer" style={{ color: '#6366f1', textDecoration: 'underline' }}>Payment Policy</a> &amp;{' '}
+                            <a href="/refund-policy" target="_blank" rel="noreferrer" style={{ color: '#6366f1', textDecoration: 'underline' }}>Refund Policy</a>
                         </div>
                     </div>
                 )}
